@@ -31,24 +31,24 @@ export default function LocalBusinessMatrix({
     <section
       id='target-bisnis'
       aria-labelledby='target-bisnis-heading'
-      className='border-b border-neutral-900/15 bg-white/60 py-16 sm:py-20'
+      className='border-b border-neutral-900/15 bg-white/60 py-12 sm:py-16 lg:py-20'
     >
       <div className='mx-auto max-w-6xl px-4 sm:px-6'>
         {/* Header */}
-        <div className='flex flex-col justify-between gap-4 border-b border-neutral-900/15 pb-8 lg:flex-row lg:items-end'>
+        <div className='flex flex-col justify-between gap-4 border-b border-neutral-900/15 pb-6 sm:pb-8 lg:flex-row lg:items-end'>
           <div>
             <p className='font-mono text-xs uppercase tracking-widest text-[#D94E1F]'>
               Target Pasar Lokal → Jawa Timur
             </p>
             <h2
               id='target-bisnis-heading'
-              className='mt-2 text-3xl font-bold tracking-tight text-neutral-950 sm:text-4xl'
+              className='mt-2 text-2xl font-bold tracking-tight text-neutral-950 sm:text-3xl lg:text-4xl'
             >
               Masalah Bisnis & Solusi Spesifik
             </h2>
           </div>
 
-          <p className='max-w-xl text-sm leading-relaxed text-neutral-600'>
+          <p className='max-w-xl text-sm leading-relaxed text-neutral-600 sm:text-base lg:text-sm'>
             Fokus awal menyasar bisnis di{' '}
             <strong className='font-semibold text-neutral-900'>
               {STUDIO_INFO.marketStrategy.primaryArea}
@@ -61,8 +61,8 @@ export default function LocalBusinessMatrix({
           </p>
         </div>
 
-        {/* Sector Filter Pills */}
-        <div className='mt-8 flex flex-wrap items-center gap-2'>
+        {/* Sector Filter Pills (nyaman di-scroll/tap di HP & tablet) */}
+        <div className='mt-6 flex flex-wrap items-center gap-2 sm:mt-8'>
           <span className='mr-1 inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wider text-neutral-500'>
             <Filter className='h-3.5 w-3.5' />
             <span>Sektor:</span>
@@ -71,7 +71,7 @@ export default function LocalBusinessMatrix({
           <button
             type='button'
             onClick={() => setActiveSector('ALL')}
-            className={`border px-3 py-1.5 text-xs font-semibold transition-colors ${
+            className={`min-h-[38px] border px-3 py-1.5 text-xs font-semibold transition-colors sm:min-h-0 ${
               activeSector === 'ALL'
                 ? 'border-neutral-950 bg-neutral-950 text-[#F7F6F2]'
                 : 'border-neutral-900/20 bg-[#F7F6F2] text-neutral-800 hover:border-neutral-950'
@@ -87,7 +87,7 @@ export default function LocalBusinessMatrix({
                 key={target.id}
                 type='button'
                 onClick={() => setActiveSector(target.id)}
-                className={`border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                className={`min-h-[38px] border px-3 py-1.5 text-xs font-semibold transition-colors sm:min-h-0 ${
                   isActive
                     ? 'border-neutral-950 bg-neutral-950 text-[#F7F6F2]'
                     : 'border-neutral-900/20 bg-[#F7F6F2] text-neutral-800 hover:border-neutral-950'
@@ -99,9 +99,66 @@ export default function LocalBusinessMatrix({
           })}
         </div>
 
-        {/* Matrix Table */}
-        <div className='mt-6 overflow-x-auto border border-neutral-900/15 bg-white'>
-          <table className='w-full min-w-[680px] border-collapse text-left'>
+        {/* Mobile View (< md): Stacked Cards agar tidak ada horizontal scroll di HP */}
+        <div className='mt-6 grid grid-cols-1 gap-4 md:hidden'>
+          {filteredTargets.map((item) => {
+            const isSelected = selectedTargetId === item.id;
+
+            return (
+              <article
+                key={item.id}
+                className={`border p-4 transition-colors ${
+                  isSelected
+                    ? 'border-[#D94E1F] bg-white'
+                    : 'border-neutral-900/15 bg-white'
+                }`}
+              >
+                <div className='flex items-start justify-between gap-2 border-b border-neutral-900/10 pb-3'>
+                  <div>
+                    <h3 className='text-base font-bold text-neutral-950'>
+                      {item.sector}
+                    </h3>
+                    <p className='mt-0.5 font-mono text-[11px] text-neutral-500'>
+                      {getDivisionTitle(item.divisionId)}
+                    </p>
+                  </div>
+                </div>
+
+                <dl className='mt-3 space-y-2.5 text-sm'>
+                  <div>
+                    <dt className='font-mono text-[11px] uppercase tracking-wider text-neutral-500'>
+                      Masalah
+                    </dt>
+                    <dd className='mt-0.5 text-neutral-700'>{item.problem}</dd>
+                  </div>
+
+                  <div>
+                    <dt className='font-mono text-[11px] uppercase tracking-wider text-neutral-500'>
+                      Solusi Kita
+                    </dt>
+                    <dd className='mt-0.5 inline-flex items-center gap-1.5 font-semibold text-neutral-950'>
+                      <ArrowRight className='h-3.5 w-3.5 shrink-0 text-[#D94E1F]' />
+                      <span>{item.solution}</span>
+                    </dd>
+                  </div>
+                </dl>
+
+                <a
+                  href='#konsultasi'
+                  onClick={() => onSelectTarget?.(item)}
+                  className='mt-4 flex min-h-[42px] w-full items-center justify-center gap-1.5 border border-neutral-950 bg-[#F7F6F2] px-3 py-2 text-xs font-semibold text-neutral-950 transition-colors active:bg-[#D94E1F] active:text-white'
+                >
+                  <span>Gunakan Solusi Ini</span>
+                  <ArrowUpRight className='h-4 w-4' />
+                </a>
+              </article>
+            );
+          })}
+        </div>
+
+        {/* Tablet & Desktop View (>= md): Clean Table */}
+        <div className='mt-6 hidden overflow-x-auto border border-neutral-900/15 bg-white md:block'>
+          <table className='w-full border-collapse text-left'>
             <thead>
               <tr className='border-b border-neutral-900/15 bg-[#F7F6F2] font-mono text-xs uppercase tracking-wider text-neutral-600'>
                 <th className='px-5 py-3.5'>Target Bisnis</th>
