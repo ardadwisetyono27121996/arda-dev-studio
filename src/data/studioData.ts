@@ -26,7 +26,7 @@ export const STUDIO_INFO = {
     expansionArea: 'Kota-kota lain di Jawa Timur',
     rule: 'Setiap konten atau penawaran menjual satu solusi spesifik agar pesan tajam dan mudah dipahami klien.',
   },
-  whatsappNumber: '6281234567890', // Ganti dengan nomor WhatsApp aktif Anda
+  whatsappNumber: '6285189371885', // Ganti dengan nomor WhatsApp aktif Anda
 };
 
 export const SERVICE_DIVISIONS: ServiceDivision[] = [
